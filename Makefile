@@ -1,0 +1,2 @@
+generate:
+	makedir cache output

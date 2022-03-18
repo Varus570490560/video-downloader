@@ -1,3 +1,4 @@
+import math
 import os
 
 import requests
@@ -49,8 +50,15 @@ def download(split_count: int):
                 download_count = download_count + 1
                 response = requests.get(url=url, headers=headers, stream=True, timeout=60)
                 with open(get_path() + '/cache/ts_cache' + str(download_count) + '.ts', 'wb') as writer:
-                    writer.write(response.content)
-                print('Downloading... ' + str(download_count) + '/' + str(split_count))
+                    downloaded = 0
+                    total_size = response.headers.get('content-length')
+                    total_size = int(total_size)/1024
+                    total_size = math.ceil(total_size)
+                    print(total_size)
+                    for data in response.iter_content(chunk_size=1024):
+                        writer.write(data)
+                        downloaded = downloaded + 1
+                        print('Downloading:' + str(downloaded) + 'KB/'+str(total_size) + 'KB----'+str(download_count) + '/' + str(split_count))
 
 
 def generate_list(split_count: int):
@@ -64,4 +72,4 @@ def generate_list(split_count: int):
 def merge(name: str):
     os.system(
         'ffmpeg -f concat -safe 0 -i ' + get_path() + '/cache/cache_3.txt ' + get_path() + '/output/' + name + '.mp4')
-    # os.system('rm '+get_path()+'/cache/*')
+    os.system('rm '+get_path()+'/cache/*')
