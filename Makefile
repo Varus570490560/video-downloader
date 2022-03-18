@@ -1,2 +1,2 @@
 generate:
-	makedir cache output
+	mkdir cache output
