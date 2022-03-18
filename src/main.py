@@ -1,3 +1,13 @@
-from analysis import get_m3u8
+import sys
+
+from analysis import get_m3u8, analysis_m3u8, download, generate_list, merge
 if __name__ =='__main__':
-    get_m3u8('https://v.pinimg.com/videos/mc/hls/ff/6a/08/ff6a08d314f34699fc77cd0423b22440_480w.m3u8')
+    get_m3u8(url=sys.argv[1])
+    split = analysis_m3u8(sys.argv[1])
+    download(split_count=split)
+    generate_list(split_count=split)
+    merge(name=sys.argv[2])
+
+
+
+
